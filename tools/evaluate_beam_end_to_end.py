@@ -647,6 +647,26 @@ RULES:
 - NEVER say "I don't have enough information" unless absolutely nothing in the context mentions the topic.
 - For "how many" questions, provide the specific count, not a range."""
 
+# CR-specific prompt: Contradiction Resolution questions MUST detect conflicting
+# statements before answering. The generic prompt produced confident answers
+# that ignored contradictions (observed: 0.1 rubric score vs correct content).
+CR_SYSTEM_PROMPT = """You are a contradiction detector. Your ONLY job is to find conflicting statements in the retrieved memories.
+
+SCAN FOR:
+- A user statement that directly contradicts another user statement
+- A claim made then later reversed or denied
+- "I have never X" followed by evidence of doing X
+- "I have not Y" followed by "I implemented Y"
+
+OUTPUT FORMAT (strictly follow):
+STEP 1 - SCAN: List EVERY statement by the user about the topic in the question. Include BOTH positive claims and negations.
+STEP 2 - CONTRADICTIONS: For each pair of conflicting statements, state: "The user said [A] but also said [B]."
+STEP 3 - RESOLUTION: If contradictions exist, your ENTIRE answer must call them out. Do NOT give a simple yes/no.
+  Format: "I notice you've mentioned contradictory information about this. You said [negation], but you also mentioned [positive claim]. Could you clarify which is correct?"
+Step 3 - ANSWER: Only if NO contradictions found, give a direct answer.
+
+CRITICAL: Your final answer must lead with the contradiction if one exists. Never resolve ambiguity by picking the majority evidence."""
+
 DEFAULT_TOP_K = 30  # Memories to retrieve per question (increased for broader context)
 RECENT_CONTEXT_COUNT = 12  # Last N messages to include as recent context
 MAX_MEMORY_CONTEXT_CHARS = 16000  # More context for LLM to find contradictions
@@ -1421,8 +1441,11 @@ def answer_with_memory(llm: LLMClient, beam: BeamMemory, question: str,
         
         # --- Pass 1: Initial answer ---
         pass1_ctx = _build_context(memories, recent_parts)
+        # CR questions need contradiction-first prompt to avoid confident
+        # answers that ignore conflicting evidence (observed: 0.1 score).
+        _pass1_prompt = CR_SYSTEM_PROMPT if ability == 'CR' else ANSWER_SYSTEM_PROMPT
         pass1_messages = [
-            {"role": "system", "content": ANSWER_SYSTEM_PROMPT},
+            {"role": "system", "content": _pass1_prompt},
             {"role": "user", "content": f"{pass1_ctx}\n\nQUESTION: {question}\n\nANSWER:"},
         ]
         pass1_answer = llm.chat(pass1_messages, temperature=0.1, max_tokens=1024)
@@ -1559,8 +1582,10 @@ Follow this format strictly:
                     {"role": "user", "content": pass2_ctx + "\n\nQUESTION: " + question + "\n\nANSWER:"},
                 ]
             else:
+                # CR questions need contradiction-first prompt even in Pass 2
+                _pass2_prompt = CR_SYSTEM_PROMPT if ability == 'CR' else ANSWER_SYSTEM_PROMPT
                 pass2_messages = [
-                    {"role": "system", "content": ANSWER_SYSTEM_PROMPT},
+                    {"role": "system", "content": _pass2_prompt},
                     {"role": "user", "content": pass2_ctx + "\n\nQUESTION: " + question + "\n\nANSWER:"},
                 ]
             return _ret(llm.chat(pass2_messages, temperature=0.1, max_tokens=4096), all_mems)

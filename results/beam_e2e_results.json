@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "date": "2026-05-17T12:08:15.102287+00:00",
-    "run_started_at": "2026-05-17T11:43:42.871562+00:00",
-    "config_id": "surgical-v12-trimctx",
+    "date": "2026-05-17T13:39:58.896102+00:00",
+    "run_started_at": "2026-05-17T13:12:30.277494+00:00",
+    "config_id": "fix-like-gap",
     "model": "deepseek-v4-pro",
     "judge_model": "deepseek-v4-pro",
     "top_k": 30,
@@ -23,24 +23,24 @@
     },
     "diagnostics": {
       "recall": {
-        "created_at": "2026-05-17T13:43:42.875010",
-        "snapshot_at": "2026-05-17T14:08:15.101950",
+        "created_at": "2026-05-17T15:12:30.281570",
+        "snapshot_at": "2026-05-17T15:39:58.895822",
         "totals": {
-          "calls": 133,
+          "calls": 152,
           "calls_using_wm_fallback": 0,
-          "calls_using_em_fallback": 133,
+          "calls_using_em_fallback": 152,
           "calls_truly_empty": 0,
           "wm_fallback_rate": 0.0,
           "em_fallback_rate": 1.0
         },
         "by_tier": {
           "wm_fts": {
-            "calls_with_hits": 97,
-            "total_hits": 2384
+            "calls_with_hits": 120,
+            "total_hits": 2758
           },
           "wm_vec": {
-            "calls_with_hits": 133,
-            "total_hits": 13788
+            "calls_with_hits": 152,
+            "total_hits": 15030
           },
           "wm_fallback": {
             "calls_with_hits": 0,
@@ -61,8 +61,8 @@
         }
       },
       "extraction": {
-        "created_at": "2026-05-17T13:43:42.887426",
-        "snapshot_at": "2026-05-17T14:08:15.102221",
+        "created_at": "2026-05-17T15:12:30.290776",
+        "snapshot_at": "2026-05-17T15:39:58.896072",
         "totals": {
           "calls": 0,
           "successes": 0,
@@ -122,7 +122,7 @@
           "ability": "ABS",
           "question": "How did the user feedback influence the UI/UX improvements I made before the public launch?",
           "ideal_answer": "Based on the provided chat, there is no information related to how user feedback influenced UI/UX improvements.",
-          "ai_answer": "The conversation does not include the specific user feedback you received or the exact UI/UX changes you implemented based on that feedback. It only records that you planned to improve the UI/UX based on user feedback as part of your pre-launch preparations (April 25, 2024), but the feedback itself and the resulting design or implementation decisions are not documented.",
+          "ai_answer": "STEP 1 - RELEVANT FACTS:\n- The user asked about finalizing deployment and improving UI/UX based on user feedback, plus adding security hardening before public launch (as of April 25, 2024).\n- The conversation includes discussions about dark mode toggle and collapsible sidebar implementation using Bootstrap and custom JavaScript/CSS.\n- There are mentions of WCAG 2.1 AA compliance review with ARIA labels and accessibility improvements.\n- The user discussed handling really long inputs in the fronte",
           "recall_provenance": {
             "engine": "linear",
             "kept_count": 90,
@@ -142,18 +142,18 @@
             },
             "top_result_tier": "working"
           },
-          "score": 1.0,
+          "score": 0.0,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 25718.613245990127,
-          "judge_time_ms": 5085.709904960822
+          "answer_time_ms": 7011.901015008334,
+          "judge_time_ms": 13126.757004007231
         },
         {
           "qid": "1:q1",
           "ability": "ABS",
           "question": "Can you tell me about my background and previous development projects?",
           "ideal_answer": "Based on the provided chat, there is no information related to your background or previous development projects.",
-          "ai_answer": "STEP 1 - RELEVANT FACTS:\n- You are developing a personal budget tracker application using Flask 2.3.1.\n- Dependencies include Flask-Login 0.6.2, Flask-SQLAlchemy 3.0.3, Flask-Caching 1.11.1, Flask-WTF 1.0.1, Flask-Migrate 4.0, SQLite 3.39, and Chart.js 4.3.0.\n- The project follows an MVC pattern with Jinja2 templating and Bootstrap 5.3.\n- You've implemented user registration, login, and session management with secure password hashing (Argon2) and account lockout via Redis.\n- The MVP scope includ",
+          "ai_answer": "STEP 1 - RELEVANT FACTS:  \n- The conversation focuses on building a **personal budget tracker** using Flask 2.3.1, SQLite 3.39, Bootstrap 5.3, Jinja2, and various extensions (Flask-Login 0.6.2, Flask-SQLAlchemy 3.0.3, Flask-WTF 1.0.1, Flask-Migrate 4.0, Flask-Caching 1.11.1, etc.).  \n- Project has a defined structure with MVC pattern, models (User, Income, Expense, Category), REST API for transactions (GET/POST/PUT/DELETE), and analytics endpoints.  \n- Security: password hashing initially with b",
           "recall_provenance": {
             "engine": "linear",
             "kept_count": 90,
@@ -173,18 +173,18 @@
             },
             "top_result_tier": "working"
           },
-          "score": 0.0,
+          "score": 1.0,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 29196.735639008693,
-          "judge_time_ms": 14103.77426596824
+          "answer_time_ms": 71682.35747102881,
+          "judge_time_ms": 3571.58770901151
         },
         {
           "qid": "1:q2",
           "ability": "CR",
           "question": "Have I worked with Flask routes and handled HTTP requests in this project?",
           "ideal_answer": "I notice you've mentioned contradictory information about this. You said you have never written any Flask routes or handled HTTP requests in this project, but you also mentioned implementing a basic h",
-          "ai_answer": "Yes, you have worked extensively with Flask routes and HTTP requests in this project. The conversation mentions:\n\n- **Project structure** includes a `routes.py` file (e.g., in the `app/` directory).\n- **RESTful routes** for creating and retrieving transactions (transaction CRUD), which you later optimized to get API response times under 250ms.\n- **Analytics endpoint** that calculates total income and expenses.\n- **User authentication routes** for registration and login using Flask-Login.\n- **Han",
+          "ai_answer": "STEP 1 - RELEVANT FACTS:\n- The project includes a file `routes.py` (e.g., \"budget_tracker/ |-- app/ |-- __init__.py |-- models.py |-- routes.py |-- forms.py\"). \n- The assistant discussed RESTful routes for transaction CRUD (create, retrieve transactions) and an analytics endpoint to calculate total income and expenses. \n- There was a review of the user's implementation that included a `Transaction` model and \"RESTful routes for creating and retrieving transactions\" plus a basic analytics endpoin",
           "recall_provenance": {
             "engine": "linear",
             "kept_count": 90,
@@ -193,29 +193,29 @@
               "fts": 0.0,
               "keyword": 249.0032,
               "importance": 46.1,
-              "recency_decay": 77.544
+              "recency_decay": 77.535
             },
             "top_result_voices": {
               "vec": 0.6648,
               "fts": 0.0,
               "keyword": 5.6126,
               "importance": 0.4,
-              "recency_decay": 0.8616
+              "recency_decay": 0.8615
             },
             "top_result_tier": "working"
           },
           "score": 0.0,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 38755.52097801119,
-          "judge_time_ms": 14115.945398050826
+          "answer_time_ms": 51619.86097600311,
+          "judge_time_ms": 12663.12941297656
         },
         {
           "qid": "1:q3",
           "ability": "CR",
           "question": "Have I integrated Flask-Login for session management in my project?",
           "ideal_answer": "I notice you've mentioned contradictory information about this. You said you have never integrated Flask-Login or managed user sessions in this project, but you also mentioned that Flask-Login v0.6.2 ",
-          "ai_answer": "STEP 1 - RELEVANT FACTS:\n- Memory: \"I'm trying to integrate Flask-Login v0.6.2 for session management in my Flask app... can you help me with an example... here's a basic structure I have so far\" (they are in the process, not yet integrated).\n- Memory: \"I've never actually integrated [Flask-Login] into this project, so I'm starting from scratch\" (explicit statement that no integration has occurred).\n- Other memories provide guides, code snippets, and plans for integrating Flask-Login, but none c",
+          "ai_answer": "Based on the conversation history, you have **not yet integrated Flask-Login** for session management in your project. You\u2019ve been actively planning and seeking guidance, but you explicitly stated that you\u2019ve never actually integrated it and are starting from scratch. For example:\n\n- You mentioned: *\u201cI'm trying to integrate Flask-Login v0.6.2 for session management in my Flask app... can you help me with an example of how to use it to replace my manual session handling\u201d* \u2014 indicating you were st",
           "recall_provenance": {
             "engine": "linear",
             "kept_count": 90,
@@ -224,91 +224,91 @@
               "fts": 0.0,
               "keyword": 299.481,
               "importance": 44.9,
-              "recency_decay": 77.535
+              "recency_decay": 77.526
             },
             "top_result_voices": {
               "vec": 0.8522,
               "fts": 0.0,
               "keyword": 8.7965,
               "importance": 0.3,
-              "recency_decay": 0.8615
+              "recency_decay": 0.8614
             },
             "top_result_tier": "working"
           },
-          "score": 0.10218978102189781,
+          "score": 0.128,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 37767.47288100887,
-          "judge_time_ms": 19178.706056030933
+          "answer_time_ms": 35621.73015897861,
+          "judge_time_ms": 18311.28051300766
         },
         {
           "qid": "1:q4",
           "ability": "EO",
           "question": "Can you list the order in which I brought up different aspects of developing my personal budget tracker throughout our conversations, in order? Mention ONLY and ONLY three items.",
           "ideal_answer": "You mentioned aspects of your personal budget tracker in this order: 1) Setting up the core functionality including user authentication, expense tracking, and data visualization, 2) Implementing trans",
-          "ai_answer": "",
+          "ai_answer": "1. Initializing the Flask project with SQLite and local dev setup.\n2. Discussing keeping the app minimal with a deadline of April 15.\n3. Updating the project timeline to target a March 31 sprint completion.",
           "recall_provenance": {
             "engine": "linear",
-            "kept_count": 90,
+            "kept_count": 113,
             "voice_sums": {
-              "vec": 49.4069,
-              "fts": 1.6,
-              "keyword": 158.5529,
-              "importance": 46.3,
-              "recency_decay": 77.526
+              "vec": 62.8301,
+              "fts": 39.9848,
+              "keyword": 196.9377,
+              "importance": 58.5,
+              "recency_decay": 97.3246
             },
             "top_result_voices": {
-              "vec": 0.6612,
-              "fts": 0.0,
-              "keyword": 3.0231,
+              "vec": 0.6633,
+              "fts": 5.1,
+              "keyword": 5.1,
               "importance": 0.4,
-              "recency_decay": 0.8614
+              "recency_decay": 0.8612
             },
             "top_result_tier": "working"
           },
           "score": 0.0,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 67465.19226196688,
-          "judge_time_ms": 5890.436264046002
+          "answer_time_ms": 183392.1225569793,
+          "judge_time_ms": 13012.23716198001
         },
         {
           "qid": "1:q5",
           "ability": "EO",
           "question": "Can you walk me through the order in which I brought up different aspects of my app development and deployment across our conversations? Mention ONLY and ONLY five items.",
           "ideal_answer": "You mentioned the aspects in this order: 1) Setting up the initial project with database schema and local server configuration, 2) Implementing transaction creation with proper response handling and e",
-          "ai_answer": "",
+          "ai_answer": "1. Initial Flask project setup with Python 3.11, SQLite 3.39, and running on port 5000.\n2. Database schema design for the personal budget tracker (users, transactions tables).\n3. REST API design for transactions with proper endpoints and error handling.\n4. Integration of Flask-Login for user session management and authentication.\n5. Creation of a responsive transaction input form with client-side validation using Bootstrap 5.3 and vanilla JS.",
           "recall_provenance": {
             "engine": "linear",
-            "kept_count": 101,
+            "kept_count": 103,
             "voice_sums": {
-              "vec": 55.1186,
-              "fts": 40.875,
-              "keyword": 229.4257,
-              "importance": 52.0,
-              "recency_decay": 86.9801
+              "vec": 56.5432,
+              "fts": 37.725,
+              "keyword": 226.2757,
+              "importance": 53.1,
+              "recency_decay": 88.6817
             },
             "top_result_voices": {
-              "vec": 0.4461,
-              "fts": 5.6,
-              "keyword": 5.6,
-              "importance": 0.5,
-              "recency_decay": 0.8611
+              "vec": 0.6633,
+              "fts": 5.1,
+              "keyword": 5.1,
+              "importance": 0.4,
+              "recency_decay": 0.8609
             },
             "top_result_tier": "working"
           },
-          "score": 0.0,
+          "score": 0.09523809523809523,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 133492.12736694608,
-          "judge_time_ms": 10448.883785982616
+          "answer_time_ms": 127646.31494000787,
+          "judge_time_ms": 21923.676867969334
         },
         {
           "qid": "1:q6",
           "ability": "IE",
           "question": "When does my first sprint end?",
           "ideal_answer": "My first sprint ends on March 29.",
-          "ai_answer": "STEP 1 - RELEVANT FACTS: In the provided memories, there is a specific sprint plan for user registration and login. It states: \"Sprint Duration: - Start Date: March 15, 2024 - End Date: March 29, 2024\". This appears to be the first defined sprint.\n\nSTEP 2 - CONTRADICTIONS: The memories also contain earlier milestones (Nov 1 - Nov 15, 2023; Nov 16 - Dec 15, 2023), but those are described as setup and implementation phases, not explicitly termed \"sprints.\" The March 15\u201329 plan is explicitly labele",
+          "ai_answer": "STEP 1 - RELEVANT FACTS: The conversation includes a sprint plan for the first two-week sprint, with a start date of March 15, 2024, and an end date of March 29, 2024. The sprint focuses on user registration and login features.\n\nSTEP 2 - CONTRADICTIONS: No contradictory information is present.\n\nSTEP 3 - TEMPORAL/CALCULATIONS: The sprint is explicitly stated to end on March 29, 2024.\n\nSTEP 4 - ANSWER: Your first sprint ends on March 29, 2024.",
           "recall_provenance": {
             "engine": "linear",
             "kept_count": 90,
@@ -317,29 +317,29 @@
               "fts": 3.35,
               "keyword": 92.8247,
               "importance": 45.1,
-              "recency_decay": 77.49
+              "recency_decay": 77.472
             },
             "top_result_voices": {
               "vec": 0.4784,
               "fts": 0.0,
               "keyword": 1.3583,
               "importance": 0.4,
-              "recency_decay": 0.861
+              "recency_decay": 0.8608
             },
             "top_result_tier": "working"
           },
           "score": 1.0,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 15346.461692999583,
-          "judge_time_ms": 5247.784589999355
+          "answer_time_ms": 7728.130918985698,
+          "judge_time_ms": 7872.227073996328
         },
         {
           "qid": "1:q7",
           "ability": "IE",
           "question": "How did I organize the tasks over the course of the sprint to ensure both backend and frontend aspects of the features were completed on time?",
           "ideal_answer": "You organized the sprint by scheduling backend-related tasks such as setting up the environment, defining the database schema, implementing registration and login, adding validation, and writing unit ",
-          "ai_answer": "STEP 1 - RELEVANT FACTS: The memories include a sprint plan for user registration and login features, with a start date of March 15, 2024, and an original end date of March 29, 2024, later extended to March 31, 2024 for testing and bug fixing. Another memory outlines a detailed project schedule from November 2023 to April 2024, breaking work into phases like Setup, User Authentication, Transaction CRUD, and Analytics. The sprint plan mentions goals of implementing registration/login securely and",
+          "ai_answer": "Based on the retrieved memories, you organized the sprint tasks to ensure both backend and frontend aspects were completed on time by following a structured, timeboxed plan. For the two\u2011week sprint (March 15\u201329, 2024) focused on user registration and login, you:\n\n1. **Set explicit sprint goals** \u2013 implement user registration/login functionality while keeping the app secure and user\u2011friendly.  \n2. **Broke the work into daily blocks** that interleaved backend and frontend activities. For example: ",
           "recall_provenance": {
             "engine": "linear",
             "kept_count": 90,
@@ -348,29 +348,29 @@
               "fts": 4.8,
               "keyword": 164.0326,
               "importance": 45.7,
-              "recency_decay": 77.481
+              "recency_decay": 77.463
             },
             "top_result_voices": {
               "vec": 0.5725,
               "fts": 0.0,
               "keyword": 2.541,
               "importance": 0.3,
-              "recency_decay": 0.8609
+              "recency_decay": 0.8607
             },
             "top_result_tier": "working"
           },
-          "score": 0.07547169811320754,
+          "score": 0.10106382978723404,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 61794.34309498174,
-          "judge_time_ms": 18098.695431952365
+          "answer_time_ms": 53455.66123095341,
+          "judge_time_ms": 20294.19259703718
         },
         {
           "qid": "1:q10",
           "ability": "KU",
           "question": "What is the average response time of the dashboard API?",
           "ideal_answer": "Around 250ms due to caching optimizations",
-          "ai_answer": "STEP 1 - RELEVANT FACTS:\n- One memory states: \"I'm trying to optimize the dashboard API response time, which was initially 800ms, and I've managed to reduce it to 300ms by optimizing SQL queries and caching results for 60 seconds.\"\n- Another memory states: \"I'm trying to optimize the dashboard API response time, which has recently improved to 250ms after adding some caching tweaks.\"\n- A third memory mentions a specific SQL query taking \"around 500ms to execute,\" but this is a query time, not nec",
+          "ai_answer": "STEP 1 - RELEVANT FACTS:\n- The dashboard API response time was initially 800ms.\n- After SQL optimizations, it was reduced to 300ms.\n- After further caching tweaks, it improved to 250ms.\n- A specific query (not the entire dashboard) took 500ms to execute, but this is a subcomponent, not the overall API response.\n\nSTEP 2 - CONTRADICTIONS:\n- No contradictions; the values represent different stages of optimization.\n\nSTEP 3 - TEMPORAL/CALCULATIONS:\n- If we consider the reported response times as data",
           "recall_provenance": {
             "engine": "linear",
             "kept_count": 90,
@@ -379,29 +379,29 @@
               "fts": 3.2,
               "keyword": 158.7276,
               "importance": 46.1,
-              "recency_decay": 77.472
+              "recency_decay": 77.454
             },
             "top_result_voices": {
               "vec": 0.5967,
               "fts": 0.0,
               "keyword": 3.4658,
               "importance": 0.3,
-              "recency_decay": 0.8608
+              "recency_decay": 0.8606
             },
             "top_result_tier": "working"
           },
-          "score": 1.0,
+          "score": 0.01020408163265306,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 71946.91157300258,
-          "judge_time_ms": 17920.615239010658
+          "answer_time_ms": 33169.67133799335,
+          "judge_time_ms": 16699.38348903088
         },
         {
           "qid": "1:q11",
           "ability": "KU",
           "question": "How many commits have been merged into the main branch of my Git repository?",
           "ideal_answer": "165 commits have been merged into the main branch.",
-          "ai_answer": "STEP 1 - RELEVANT FACTS: The user stated they tagged a release v1.0.0 on April 20, which has been pushed to the GitHub repository with 150 commits and 12 branches merged.\n\nSTEP 2 - CONTRADICTIONS: No contradictory information found.\n\nSTEP 3 - TEMPORAL/CALCULATIONS: Not applicable.\n\nSTEP 4 - ANSWER: 150 commits have been merged into the main branch of your Git repository, according to the information provided when you tagged release v1.0.0 on April 20.",
+          "ai_answer": "STEP 1 - RELEVANT FACTS: The memory states: \"I've already tagged a release v1.0.0 on April 20, which has been pushed to the GitHub repository with 150 commits and 12 branches merged.\" This indicates that 150 commits were included in the release, implying they are the commits merged into the main branch.\n\nSTEP 2 - CONTRADICTIONS: No contradictory information is present in the provided memories.\n\nSTEP 3 - TEMPORAL/CALCULATIONS: Not applicable for counting commits; the number is directly stated.\n\nS",
           "recall_provenance": {
             "engine": "linear",
             "kept_count": 90,
@@ -410,53 +410,53 @@
               "fts": 1.6,
               "keyword": 127.6446,
               "importance": 45.5,
-              "recency_decay": 77.454
+              "recency_decay": 77.445
             },
             "top_result_voices": {
               "vec": 0.5307,
               "fts": 0.0,
               "keyword": 2.133,
               "importance": 0.3,
-              "recency_decay": 0.8606
+              "recency_decay": 0.8605
             },
             "top_result_tier": "working"
           },
           "score": 0.0,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 20041.08894203091,
-          "judge_time_ms": 4102.746771997772
+          "answer_time_ms": 23376.763096021023,
+          "judge_time_ms": 8861.961885006167
         },
         {
           "qid": "1:q12",
           "ability": "MR",
           "question": "How many new columns did I want to add to the transactions table across my requests?",
           "ideal_answer": "Two columns: 'category' and 'notes'.",
-          "ai_answer": "",
+          "ai_answer": "STEP 1 - RELEVANT FACTS:\n- The user requested to update the transactions table schema to include a category VARCHAR(50) column for better expense classification.\n- Another memory discusses adding new fields to an existing table using Flask-Migrate, but it does not specify how many fields; the user's original request for that memory is not provided, so no specific count can be inferred.\n\nSTEP 2 - CONTRADICTIONS:\n- No contradictory information is present.\n\nSTEP 3 - TEMPORAL/CALCULATIONS:\n- Only on",
           "recall_provenance": {
             "engine": "linear",
-            "kept_count": 90,
+            "kept_count": 102,
             "voice_sums": {
-              "vec": 58.9174,
-              "fts": 0.0,
-              "keyword": 138.1456,
-              "importance": 45.4,
-              "recency_decay": 77.454
+              "vec": 65.409,
+              "fts": 10.08,
+              "keyword": 148.2256,
+              "importance": 53.0,
+              "recency_decay": 87.7608
             },
             "top_result_voices": {
               "vec": 0.6071,
               "fts": 0.0,
               "keyword": 2.5725,
               "importance": 0.3,
-              "recency_decay": 0.8606
+              "recency_decay": 0.8604
             },
             "top_result_tier": "working"
           },
           "score": 0.0,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 69580.74040996144,
-          "judge_time_ms": 3861.779213999398
+          "answer_time_ms": 47728.91778295161,
+          "judge_time_ms": 7687.886240018997
         },
         {
           "qid": "1:q13",
@@ -472,29 +472,29 @@
               "fts": 4.8,
               "keyword": 175.7084,
               "importance": 46.1,
-              "recency_decay": 77.436
+              "recency_decay": 77.427
             },
             "top_result_voices": {
               "vec": 0.6298,
               "fts": 0.0,
               "keyword": 3.2039,
               "importance": 0.4,
-              "recency_decay": 0.8604
+              "recency_decay": 0.8603
             },
             "top_result_tier": "working"
           },
           "score": 0.0,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 44977.21583902603,
-          "judge_time_ms": 7107.262091012672
+          "answer_time_ms": 52486.09084403142,
+          "judge_time_ms": 7246.981532021891
         },
         {
           "qid": "1:q16",
           "ability": "SUM",
           "question": "Can you provide a comprehensive summary of how my budget tracker project has progressed, including the key features implemented, the development timeline, security enhancements, and documentation effo",
           "ideal_answer": "Your budget tracker project evolved through several stages, starting with the initial setup of a Flask application featuring user authentication, expense tracking, and data visualization capabilities.",
-          "ai_answer": "STEP 1 - RELEVANT FACTS\n\nProject components and features:\n- **User Authentication**: Registration, login, logout (using Flask-Login 0.6.2, Flask 2.3.1, SQLite 3.39). Password hashing initially with bcrypt, later switched to Argon2, also implemented via Werkzeug's generate_password_hash/check_password_hash. Multi-factor authentication was considered. CSRF protection, HTTPS via Let's Encrypt, Flask-Talisman security headers.\n- **Transaction Management**: Add income, add expense, view transactions.",
+          "ai_answer": "STEP 1 - RELEVANT FACTS:\n- Project start: Phase 1 from Nov 1 to Nov 15, 2023 (Flask setup, virtual environment, initial database schema with users table).\n- User authentication implemented Nov 16 - Dec 15, 2023 (registration, login, logout).\n- Sprint plan March 15 - March 29, 2024 for user registration and login features.\n- Deadline for MVP: April 15, 2024 (including income/expense tracking, user login, basic analytics).\n- Release v1.0.0 tagged on April 20, 2024 (150 commits, 12 branches merged,",
           "recall_provenance": {
             "engine": "linear",
             "kept_count": 90,
@@ -503,29 +503,29 @@
               "fts": 0.0,
               "keyword": 118.8638,
               "importance": 45.8,
-              "recency_decay": 77.427
+              "recency_decay": 77.418
             },
             "top_result_voices": {
               "vec": 0.7654,
               "fts": 0.0,
               "keyword": 1.9507,
               "importance": 0.4,
-              "recency_decay": 0.8603
+              "recency_decay": 0.8602
             },
             "top_result_tier": "working"
           },
-          "score": 0.07456140350877193,
+          "score": 0.08430913348946135,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 65432.22760100616,
-          "judge_time_ms": 18934.070607996546
+          "answer_time_ms": 74667.95935999835,
+          "judge_time_ms": 19746.239237021655
         },
         {
           "qid": "1:q17",
           "ability": "SUM",
           "question": "Can you give me a comprehensive summary of how I handled the security and database challenges in my budget tracker app across our discussions?",
           "ideal_answer": "Throughout our conversations, you progressively developed a secure and reliable budget tracker application by addressing several key challenges. Initially, you focused on implementing password hashing",
-          "ai_answer": "STEP 1 - RELEVANT FACTS:\n\n**Security Measures Discussed:**\n\n- **Password Hashing**: Multiple recommendations were made. Initially, bcrypt was suggested (Memory 11). Later, switching to Argon2 was highlighted as a step already taken (Memory 6). Werkzeug\u2019s built-in hashing (generate_password_hash) was also used in some implementation examples (Memory 25). Salting and strong, modern algorithms were consistently emphasized (Memories 7,8).\n\n- **Session Management**: Flask-Login 0.6.2 was integrated t",
+          "ai_answer": "STEP 1 - RELEVANT FACTS:\n- **Password Hashing:** Initially used Werkzeug\u2019s hashing, then migrated to Argon2 after the assistant recommended bcrypt/Argon2 and the user confirmed \u201cswitching to Argon2 for password hashing.\u201d\n- **Session Management:** Replaced manual Flask session handling with Flask-Login 0.6.2, integrating login, logout, session validation, and error handling for unauthorized access. Secret key was strengthened and stored securely.\n- **Cross-Site Protection:** CSRF protection via F",
           "recall_provenance": {
             "engine": "linear",
             "kept_count": 90,
@@ -534,53 +534,53 @@
               "fts": 0.0,
               "keyword": 230.2044,
               "importance": 46.4,
-              "recency_decay": 77.418
+              "recency_decay": 77.4
             },
             "top_result_voices": {
               "vec": 0.7307,
               "fts": 0.0,
               "keyword": 4.8278,
               "importance": 0.4,
-              "recency_decay": 0.8602
+              "recency_decay": 0.86
             },
             "top_result_tier": "working"
           },
-          "score": 0.09090909090909091,
+          "score": 0.06896551724137931,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 72582.1037919959,
-          "judge_time_ms": 18514.566514990292
+          "answer_time_ms": 76070.87891903939,
+          "judge_time_ms": 19020.720047992654
         },
         {
           "qid": "1:q18",
           "ability": "TR",
           "question": "How many weeks do I have between finishing the transaction management features and the final deployment deadline?",
           "ideal_answer": "I have exactly 4 weeks between finishing the transaction management features on January 15, 2024, and the final deployment deadline on March 15, 2024.",
-          "ai_answer": "",
+          "ai_answer": "1. IDENTIFIED DATES: Transaction management features finish: December 15, 2023; Final deployment deadline: January 1, 2024.\n2. CALCULATION: January 1, 2024 - December 15, 2023 = 17 days; 17 days \u00f7 7 days/week = 2.42857 weeks.\n3. FINAL ANSWER: 2.43 weeks",
           "recall_provenance": {
             "engine": "linear",
-            "kept_count": 90,
+            "kept_count": 99,
             "voice_sums": {
-              "vec": 52.6313,
-              "fts": 0.0,
-              "keyword": 136.1724,
-              "importance": 46.1,
-              "recency_decay": 77.4
+              "vec": 57.5114,
+              "fts": 7.95,
+              "keyword": 152.0497,
+              "importance": 50.4,
+              "recency_decay": 85.1292
             },
             "top_result_voices": {
-              "vec": 0.5686,
-              "fts": 0.0,
-              "keyword": 2.3627,
+              "vec": 0.5555,
+              "fts": 2.3,
+              "keyword": 2.3,
               "importance": 0.3,
-              "recency_decay": 0.86
+              "recency_decay": 0.8598
             },
             "top_result_tier": "working"
           },
           "score": 0.0,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 65243.90213098377,
-          "judge_time_ms": 4247.391120006796
+          "answer_time_ms": 182875.10744697647,
+          "judge_time_ms": 16272.151025012136
         },
         {
           "qid": "1:q19",
@@ -590,28 +590,28 @@
           "ai_answer": "",
           "recall_provenance": {
             "engine": "linear",
-            "kept_count": 107,
+            "kept_count": 90,
             "voice_sums": {
-              "vec": 55.9912,
-              "fts": 17.75,
-              "keyword": 217.5659,
-              "importance": 55.2,
-              "recency_decay": 92.0076
+              "vec": 46.6681,
+              "fts": 3.6,
+              "keyword": 188.1541,
+              "importance": 46.2,
+              "recency_decay": 77.355
             },
             "top_result_voices": {
               "vec": 0.5445,
               "fts": 0.0,
               "keyword": 4.4767,
               "importance": 0.3,
-              "recency_decay": 0.8599
+              "recency_decay": 0.8595
             },
             "top_result_tier": "working"
           },
           "score": 0.0,
           "nuggets": [],
           "assessment": "",
-          "answer_time_ms": 123524.36410001246,
-          "judge_time_ms": 6179.216293967329
+          "answer_time_ms": 50590.702418005094,
+          "judge_time_ms": 4103.299015958328
         }
       ]
     }
