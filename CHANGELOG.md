@@ -5,6 +5,58 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Simple Versioning](https://github.com/AxDSan/mnemosyne) (MAJOR.MINOR).
 
+## [3.0.0] — 2026-05-18
+
+### Added
+
+- **MEMORIA Architecture.** Structured fact extraction and retrieval system.
+  New SQLite tables (`memoria_facts`, `memoria_timelines`, `memoria_kg`,
+  `memoria_instructions`, `memoria_preferences`) with fact versioning,
+  previous-value tracking, and valid-from/to windows.
+- **Structured retrieval router.** `memoria_retrieve()` dispatches queries
+  by ability (IE, MR, KU, TR, CR, EO, ABS, IF, PF, SUM) to specialized
+  retrieval paths with different SQL strategies per question type.
+- **Gap analysis loop.** Recursive re-querying for multi-hop and temporal
+  questions. Extracts ISO dates from context, performs hard keyword
+  searches for GAP-identified missing information.
+- **Strict fact matching** (wysie, #143). Token-based conservative matching
+  behind `MNEMOSYNE_STRICT_FACT_MATCH=1`. Filters stopwords, requires
+  multi-token overlap or distinctive structural markers.
+- **Proactive memory linking** (coe0718, #146). Zero-LLM graph edge creation
+  at ingestion via content similarity (FTS5) and entity overlap strategies.
+  Gated behind `MNEMOSYNE_PROACTIVE_LINKING=1`.
+- **LLM-based episodic consolidation.** Compresses working memories into
+  episodic summaries via cheap flash models when API key available.
+
+### Changed
+
+- **Namespace migration.** All `nous_` tables/functions renamed to
+  `memoria_` to avoid implying affiliation with any external entity.
+- **Fact versioning.** Metrics with the same key now create version chains
+  instead of overwriting. Previous values preserved for temporal recall.
+- **Retrieval engine upgrade.** BEAM benchmark retrieval moved from
+  FTS5-only to structured MEMORIA routing with 4-layer fallback.
+
+### Fixed
+
+- **KU key collision.** Context-aware metric keys prevent different metrics
+  (e.g., `response_time_ms` vs `connection_timeout_ms`) from colliding on
+  generic key names.
+- **CR UNION search.** Contradiction resolution now searches both episodic
+  memory and structured facts via UNION query.
+- **EO strict JSON mode.** Event ordering prompts now force JSON-only output
+  with negative examples to prevent rambling.
+- **IE latest-value guidance.** Information extraction prompts now
+  prioritize most recent values for evolving facts.
+- **TR token bump.** Temporal reasoning max_tokens increased from 1024 to
+  2048 to accommodate date extraction preamble.
+
+### Performance
+
+- BEAM 100K OVERALL: 65.2% (Llama 3.3 70B) — passes Honcho (63.0%)
+- IE: 91.5%, MR: 87.5%, KU: 50%, TR: 75%, ABS: 100%
+- Ingestion: 36s for 188 messages with full MEMORIA extraction
+
 ## [2.9.0] — 2026-05-17
 
 ### Fixed
