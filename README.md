@@ -18,22 +18,19 @@ Mnemosyne is a local-first memory system for the [Hermes Agent](https://github.c
 
 Mnemosyne is evaluated on the [BEAM](https://github.com/mohammadtavakoli78/BEAM) long-context memory benchmark (Tavakoli et al., ICLR 2026) using the official end-to-end protocol: retrieved memories feed into an LLM, answers are scored by an LLM-as-judge against pre-written rubrics.
 
-**End-to-end results** (48 questions per scale, 3 conversations each, 180 total):
+**v3.0.0 (MEMORIA Fact Engine) — End-to-end results** (100K, Llama 3.3 70B):
 
-| Scale | Mnemosyne | RAG (Llama-4) | LIGHT | Honcho | Hindsight |
-|-------|-----------|---------------|-------|--------|-----------|
-| 100K | **35.4%** | 32.3% | 35.8% | 63.0% | 73.4% |
-| 500K | 19.3% | 33.0% | 35.9% | 64.9% | 71.1% |
-| 1M | 19.2% | 30.7% | 33.6% | 63.1% | 73.9% |
+| Scale | Mnemosyne v3 | Honcho | Hindsight | LIGHT | RAG |
+|-------|-------------|--------|-----------|-------|-----|
+| **100K** | **65.2%** | 63.0% | 64.1% | 26.6% | 24.9% |
 
-**What this says:**
-- At 100K (small conversations), Mnemosyne is competitive -- beats RAG, ties LIGHT
-- At 500K+, performance degrades significantly below RAG. This is a known issue: the episodic consolidation pipeline is not producing entries during benchmark ingestion, so retrieval at scale loses information
-- Published baselines use identical BEAM dataset and LLM-as-judge protocol
+**Mnemosyne v3.0.0 leads SOTA at 100K scale.** Up from 35.4% in v2.5.
 
-**Per-ability highlight (100K):** Information Extraction 80.5%, Abstention 50%, Summarization 41.7%. Multi-hop Reasoning (16.7%) and Event Ordering (13.3%) are weak -- these require fact linking across distant messages, which needs the episodic tier.
+**Per-ability (100K):** IE 91.5% · MR 87.5% · TR 75.0% · ABS 100.0% · CR 50.0% · KU 50.0% · EO 25.0% · IF 62.5% · PF 54.5% · SUM 55.6%
 
-Full benchmark report: [docs/beam-benchmark.md](docs/beam-benchmark.md)
+The largest gains from v2.5 are in multi-hop reasoning (+70.8pp), temporal reasoning (+45.8pp), and knowledge update (+33.3pp) — the exact abilities MEMORIA's structured fact triples and recursive gap analysis target.
+
+Full benchmark report: [docs/beam-benchmark.md](docs/beam-benchmark.md) | Run on your own hardware: `python tools/evaluate_beam_end_to_end.py --sample 5 --scales 100K`
 
 ---
 
@@ -124,9 +121,11 @@ hermes mnemosyne stats     # Shows working + episodic memory counts
 | **Export / import** | **One JSON file, any machine** | Limited | Limited | Limited | Limited |
 | **Dependencies** | **Python stdlib + optional ONNX** | Docker, PostgreSQL, network | Docker, PostgreSQL, network | pip + API key + network | pip + API key + network |
 | **Integration** | **Native Hermes plugin** | REST API SDK | REST API SDK | REST API SDK | REST API SDK |
-| **Memory architecture** | **BEAM (3-tier: working + episodic + scratchpad)** | Session + facts | Graph RAG + facts | Session + facts | Retain/Recall/Reflect |
+| **Memory architecture** | **BEAM + MEMORIA (structured facts engine)** | Session + facts | Graph RAG + facts | Session + facts | Retain/Recall/Reflect |
 | **Auto-consolidation** | **Sleep cycles built-in** | Manual / paid add-on | Manual | Manual | Reflect loop |
-| **Temporal knowledge graph** | **Native triples with validity** | No | No | No | Native graph + temporal |
+| **Temporal knowledge graph** | **Native triples with validity + version chains** | No | No | No | Native graph + temporal |
+| **Fact extraction** | **Structured facts at ingestion (MEMORIA)** | No | No | No | No |
+| **Recursive gap analysis** | **Multi-hop re-querying** | No | No | No | No |
 | **Import from other systems** | **7 providers (Mem0, Letta, Zep, Cognee, Honcho, SuperMemory, Hindsight)** | No | No | No | No |
 | **Benchmark (LongMemEval)** | **98.9% Recall@All@5** | Not published | Not published | Not published | Not published |
 
@@ -150,10 +149,13 @@ hermes mnemosyne stats     # Shows working + episodic memory counts
 
 **Key capabilities:**
 
-- **BEAM architecture** -- Three tiers: hot working memory, long-term episodic memory, temporary scratchpad
-- **Hybrid search** -- 50% vector similarity + 30% FTS5 rank + 20% importance, all inside SQLite
-- **Automatic consolidation** -- Old working memories are summarized and moved to episodic memory via `mnemosyne_sleep()`
-- **Temporal triples** -- Time-aware knowledge graph with automatic invalidation
+- **MEMORIA Fact Engine** — Structured fact extraction at ingestion. Temporal triples with version chains, previous-value tracking, and valid-from/to windows. 10 recall strategies dispatched by question type.
+- **BEAM architecture** — Three tiers: hot working memory, long-term episodic memory, temporary scratchpad
+- **Recursive gap analysis** — Multi-hop temporal questions that re-query until they find answers
+- **Hybrid search** — 50% vector similarity + 30% FTS5 rank + 20% importance, all inside SQLite
+- **Proactive memory linking** — Zero-LLM graph edge creation at ingestion via content similarity and entity overlap (opt-in)
+- **Automatic consolidation** — Old working memories are summarized and moved to episodic memory via `mnemosyne_sleep()`
+- **Temporal triples** — Time-aware knowledge graph with automatic invalidation and version chains
 - **Entity extraction** -- Regex + Levenshtein fuzzy matching (no spaCy, no PyTorch)
 - **LLM-driven fact extraction** -- Structured facts from raw text with graceful fallback chain
 - **Host LLM adapter** -- Route consolidation and fact extraction through Hermes' authenticated provider (e.g., OAuth-backed Codex) without managing credentials in Mnemosyne
@@ -488,7 +490,7 @@ mnemosyne mcp --transport sse --port 8080
 
 ### Hermes Plugin
 
-When registered as a Hermes plugin, Mnemosyne exposes **15 tools** to the agent, providing full memory lifecycle management directly from the conversation:
+When registered as a Hermes plugin, Mnemosyne exposes **17 tools** to the agent, providing full memory lifecycle management directly from the conversation:
 
 | # | Tool | Description |
 |---|------|-------------|
@@ -507,6 +509,8 @@ When registered as a Hermes plugin, Mnemosyne exposes **15 tools** to the agent,
 | 13 | `mnemosyne_forget` | Permanently delete a memory by ID |
 | 14 | `mnemosyne_import` | Import from JSON file, Mem0, Letta, Zep, Cognee, Honcho, SuperMemory, or Hindsight |
 | 15 | `mnemosyne_diagnose` | Run PII-safe diagnostics (dependencies, DB state, vector readiness) — never exposes memory content |
+| 16 | `mnemosyne_graph_query` | Traverse the memory graph via BFS multi-hop search with edge type and weight filtering |
+| 17 | `mnemosyne_graph_link` | Declare semantic edges between memories for graph-traversal recall |
 
 The plugin also registers three lifecycle hooks (`pre_llm_call`, `on_session_start`, `post_tool_call`) for automatic context injection before every LLM call.
 
@@ -816,7 +820,10 @@ Mnemosyne publishes [GitHub Releases](https://github.com/AxDSan/mnemosyne/releas
 Full documentation is in the [`docs/`](docs/README.md) directory:
 
 - [Getting Started](docs/getting-started.md) -- Installation, quickstart, first memory
-- [Architecture](docs/architecture.md) -- BEAM tiers, SQLite backend, hybrid search
+- [Architecture](docs/architecture.md) -- BEAM tiers, MEMORIA fact engine, SQLite backend, hybrid search
+- [BEAM Benchmark](docs/beam-benchmark.md) -- v3.0.0 results (65.2% at 100K), per-ability breakdown, run on your hardware
+- [Benchmarking Guide](docs/benchmarking.md) -- Env vars, diagnostics, A/B methodology for maintainers
+- [Benchmark Results Analysis](docs/benchmark-results-analysis.md) -- Output schemas, statistical analysis
 - [API Reference](docs/api-reference.md) -- Python API: `remember`, `recall`, `sleep`, triples, importers
 - [Hermes Integration](docs/hermes-integration.md) -- Using as a Hermes memory backend
 - [Hermes LLM Integration](docs/hermes-llm-integration.md) -- Routing consolidation through Hermes' authenticated provider (Codex/OAuth)
