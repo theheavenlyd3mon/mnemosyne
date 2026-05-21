@@ -531,9 +531,8 @@ def ingest_conversation(beam: BeamMemory, messages: list[dict]) -> dict:
             if _raw.strip():
                 _fc = beam.extract_and_store_facts(_raw, batch_start + j)
                 for k, v in _fc.items():
-                    if k.startswith('_'):
-                        continue  # Skip metadata keys (_lang, etc.)
-                    _fact_counts[k] = _fact_counts.get(k, 0) + v
+                    if isinstance(v, (int, float)):
+                        _fact_counts[k] = _fact_counts.get(k, 0) + v
         if _fact_counts:
             stats["memoria_facts"] = _fact_counts
             total = sum(_fact_counts.values())
